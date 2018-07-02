@@ -1,0 +1,21 @@
+{
+    "semi": false,
+    "printWidth": 100,
+    "tabWidth": 4,
+    "bracketSpacing": false,
+    "proseWrap": "preserve",
+    "overrides": [
+        {
+            "files": ["*.less", "*.css", "*.scss", "*.stylus"],
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": ["*.md"],
+            "options": {
+                "tabWidth": 1
+            }
+        }
+    ]
+}
