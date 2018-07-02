@@ -78,7 +78,7 @@ export default {
     }
 }
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
 .container {
     padding: 0 30rpx;
     .userinfo {
