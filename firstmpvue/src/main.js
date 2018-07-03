@@ -11,9 +11,9 @@ export default {
         pages: ["^pages/books/main"],
         window: {
             backgroundTextStyle: "light",
-            navigationBarBackgroundColor: "#fff",
+            navigationBarBackgroundColor: "#EA5149",
             navigationBarTitleText: "WeChat",
-            navigationBarTextStyle: "black"
+            navigationBarTextStyle: "light"
         },
         tabBar: {
             selectedColor: "#EA5149",

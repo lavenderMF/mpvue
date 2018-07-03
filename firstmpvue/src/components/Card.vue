@@ -7,10 +7,8 @@
                 mode="aspectFit">
         </div>
         <div class="detail">
-            <div class="row">
-                <div class="right">
-                    {{ book.rate }}<Rate :value="book.rate"></Rate>
-                </div>
+            <div class="row text-primary">
+                <div class="right">{{ book.rate }}<Rate :value="book.rate"></Rate></div>
                 <div class="left">
                     {{ book.title }}
                 </div>

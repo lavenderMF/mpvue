@@ -14,7 +14,7 @@ export default {
             default: "0"
         }
     },
-    conputed: {
+    computed: {
         style() {
             return `width:${this.value / 2}em`
         }
@@ -24,12 +24,14 @@ export default {
 <style lang="scss">
 .rate {
     position: relative;
+    display: inline-block;
     .hollow {
         position: absolute;
+        display: inline-block;
         top: 0;
         left: 0;
-        display: inline-block;
         width: 0;
+        font-size: 14px;
         overflow: hidden;
     }
 }
