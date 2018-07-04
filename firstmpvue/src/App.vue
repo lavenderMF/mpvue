@@ -16,6 +16,11 @@ export default {
 }
 </script>
 <style lang='scss'>
+.text-footer {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 .text-primary {
     color: #ea5149;
 }
