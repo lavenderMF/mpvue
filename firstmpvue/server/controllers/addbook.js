@@ -1,16 +1,13 @@
 const https = require('https')
-const {
-    mysql
-} = require('../qcloud')
+const {mysql} = require('../qcloud')
 
 // 新增图书
-module.exports = async (ctx) => {
-    const {
-        isbn,
-        openId
-    } = ctx.request.body
+module.exports = async ctx => {
+    const {isbn, openId} = ctx.request.body
     if (isbn && openId) {
-        const findRes = await mysql('books').select().where('isbn', isbn)
+        const findRes = await mysql('books')
+            .select()
+            .where('isbn', isbn)
         if (findRes.length) {
             ctx.state = {
                 code: -1,
@@ -24,17 +21,12 @@ module.exports = async (ctx) => {
         let url = 'https://api.douban.com/v2/book/isbn/' + isbn
         const bookinfo = await getJson(url)
         const rate = bookinfo.rating.average
-        const {
-            title,
-            image,
-            alt,
-            publisher,
-            summary,
-            price
-        } = bookinfo
-        const tags = bookinfo.tags.map(v => {
-            return `${v.title} ${v.count}`
-        }).join(',')
+        const {title, image, alt, publisher, summary, price} = bookinfo
+        const tags = bookinfo.tags
+            .map(v => {
+                return `${v.title} ${v.count}`
+            })
+            .join(',')
         const author = bookinfo.author.join(',')
         try {
             await mysql('books').insert({
