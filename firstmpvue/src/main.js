@@ -17,8 +17,7 @@ export default {
         },
         tabBar: {
             selectedColor: "#EA5149",
-            list: [
-                {
+            list: [{
                     pagePath: "pages/books/main",
                     text: "图书",
                     iconPath: "static/img/book.png",

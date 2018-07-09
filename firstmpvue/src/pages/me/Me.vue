@@ -1,13 +1,15 @@
 <template>
     <div class="container">
-        <div 
-            class="userinfo" 
-            @click="login()">
+        <button 
+            open-type="getUserInfo" 
+            class="userinfo"
+            bindgetuserinfo="onGotUserInfo"
+            @click="login">
             <img 
                 :src="userinfo.avatarUrl" 
                 alt="" >
             <p>{{ userinfo.nickName }}</p>
-        </div>
+        </button>
         <YearProgress></YearProgress>
         <button 
             v-if="userinfo.openId" 
@@ -36,6 +38,11 @@ export default {
         // this.userinfo = wx.getStorageSync('userinfo')
     },
     methods: {
+        onGotUserInfo: function(e) {
+            console.log(e.detail.errMsg)
+            console.log(e.detail.userInfo)
+            console.log(e.detail.rawData)
+        },
         async addBook(isbn) {
             const res = await post("/weapp/addbook", {
                 isbn,

@@ -1,6 +1,29 @@
 <template>
     <div>
         <BookInfo :info="info"></BookInfo>
+        <div class="comment">
+            <textarea 
+                v-model="comment" 
+                :maxlength="100"
+                class="textarea"
+                placeholder="请输入图书短评"></textarea>
+            <div class="location">
+                地理位置：
+                <switch 
+                    :checked="location" 
+                    color="#EA5A49"
+                    @change="getGeo"></switch>
+                <span class="text-primary">{{ location }}</span>
+            </div>
+            <div class="phone">
+                手机型号：
+                <switch 
+                    :checked="phone" 
+                    color="#EA5A49"
+                    @change="getPhone"></switch>
+                <span class="text-primary">{{ phone }}</span>
+            </div>
+        </div>
     </div>
     
 </template>
@@ -14,7 +37,10 @@ export default {
     data() {
         return {
             bookid: "",
-            info: {}
+            info: {},
+            comment: "",
+            phone: "",
+            Geo: ""
         }
     },
     mounted() {
@@ -28,9 +54,36 @@ export default {
             wx.setNavigationBarTitle({
                 title: info.title
             })
+        },
+        getGeo() {},
+        getPhone(e) {
+            if (e.target.value) {
+                const phoneInfo = wx.getSystemInfoSync()
+                this.phone = phoneInfo.model
+            } else {
+                this.phone = ""
+            }
         }
     }
 }
 </script>
-<style>
+<style lang="scss">
+.comment {
+    margin-top: 20px;
+    .textarea {
+        width: 730rpx;
+        height: 200rpx;
+        background: #eee;
+        padding: 10rpx;
+    }
+    .location {
+        margin-top: 10px;
+    }
+    .phone {
+        margin-top: 10px;
+        span {
+            font-size: 14px;
+        }
+    }
+}
 </style>
