@@ -23,12 +23,17 @@
                     @change="getPhone"></switch>
                 <span class="text-primary">{{ phone }}</span>
             </div>
+            <button 
+                class="btn" 
+                @click="addComment">
+                评论
+            </button>
         </div>
     </div>
     
 </template>
 <script>
-import {get} from "@/utils"
+import {get, post} from "@/utils"
 import BookInfo from "@/components/BookInfo"
 export default {
     components: {
@@ -36,16 +41,21 @@ export default {
     },
     data() {
         return {
+            userinfo: {},
             bookid: "",
             info: {},
             comment: "",
             phone: "",
-            Geo: ""
+            location: ""
         }
     },
     mounted() {
         this.bookid = this.$root.$mp.query.id
         this.getDetail()
+        const userinfo = wx.getStorageSync("userinfo")
+        if (userinfo) {
+            this.userinfo = userinfo
+        }
     },
     methods: {
         async getDetail() {
@@ -55,13 +65,62 @@ export default {
                 title: info.title
             })
         },
-        getGeo() {},
+        getGeo(e) {
+            // DUSOroZT7MfMroZn9ZNVBgrVuiG2L4GU  latitude  longitude
+            const ak = "DUSOroZT7MfMroZn9ZNVBgrVuiG2L4GU"
+            let url = "http://api.map.baidu.com/geocoder/v2/"
+            // http://api.map.baidu.com/geocoder/v2
+            if (e.target.value) {
+                wx.getLocation({
+                    success: geo => {
+                        wx.request({
+                            url,
+                            data: {
+                                ak,
+                                location: `${geo.latitude},${geo.longitude}`,
+                                output: "json"
+                            },
+                            success: res => {
+                                console.log(res)
+                                if (res.data.status == 0) {
+                                    this.location = res.data.result.addressComponent.city
+                                } else {
+                                    this.location = "未知地点"
+                                }
+                            }
+                        })
+                        console.log(geo)
+                    }
+                })
+            } else {
+                this.location = ""
+            }
+        },
         getPhone(e) {
             if (e.target.value) {
                 const phoneInfo = wx.getSystemInfoSync()
                 this.phone = phoneInfo.model
             } else {
                 this.phone = ""
+            }
+        },
+        async addComment() {
+            if (!this.comment) {
+                return
+            }
+            console.log(this.userinfo)
+            const data = {
+                openId: this.userinfo.openId,
+                bookid: this.bookid,
+                comment: this.comment,
+                phone: this.phone,
+                location: this.location
+            }
+            try {
+                await post("/weapp/addcomment", data)
+                this.comment = ""
+            } catch (e) {
+                showModel("失败", e.message)
             }
         }
     }
