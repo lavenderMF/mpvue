@@ -41,7 +41,7 @@
     
 </template>
 <script>
-import {get, post} from "@/utils"
+import {get, post, showModal} from "@/utils"
 import BookInfo from "@/components/BookInfo"
 import commentlist from "@/components/commentlist"
 export default {

@@ -1,5 +1,5 @@
 <template>
-    <div class="comment-list">
+    <div class="comment-list" >
         <div 
             v-if="comments.length" 
             class="page-title">
@@ -8,7 +8,8 @@
         <div 
             v-for="(comment,index) in comments" 
             :key="index" 
-            class="comment">
+            class="comment"
+            @click="handleClick(comment)">
             <div class="user">
                 <div class="inline">
                     <img 
@@ -36,6 +37,24 @@ export default {
             type: Array,
             default: () => {
                 return []
+            }
+        },
+        type: {
+            type: "",
+            default: () => {
+                return ""
+            }
+        }
+    },
+    mounted() {
+        console.log(this.comments)
+    },
+    methods: {
+        handleClick(comment) {
+            if (this.type === "user") {
+                wx.navigateTo({
+                    url: "/pages/detail/main?id=" + comment.bookid
+                })
             }
         }
     }
