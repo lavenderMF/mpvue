@@ -1,7 +1,10 @@
 <template>
     <div>
         <BookInfo :info="info"></BookInfo>
-        <div class="comment">
+        <commentlist :comments="comments"></commentlist>
+        <div 
+            v-if="showAdd" 
+            class="comment">
             <textarea 
                 v-model="comment" 
                 :maxlength="100"
@@ -29,18 +32,26 @@
                 评论
             </button>
         </div>
+        <div 
+            v-else 
+            class="text-footer">
+            未登录或者已经评论过了
+        </div>
     </div>
     
 </template>
 <script>
 import {get, post} from "@/utils"
 import BookInfo from "@/components/BookInfo"
+import commentlist from "@/components/commentlist"
 export default {
     components: {
-        BookInfo
+        BookInfo,
+        commentlist
     },
     data() {
         return {
+            comments: [],
             userinfo: {},
             bookid: "",
             info: {},
@@ -49,9 +60,21 @@ export default {
             location: ""
         }
     },
+    computed: {
+        showAdd() {
+            if (!this.userinfo.openId) {
+                return false
+            }
+            if (this.comments.filter(v => v.openId == this.userinfo.openId).length) {
+                return false
+            }
+            return true
+        }
+    },
     mounted() {
         this.bookid = this.$root.$mp.query.id
         this.getDetail()
+        this.getComment()
         const userinfo = wx.getStorageSync("userinfo")
         if (userinfo) {
             this.userinfo = userinfo
@@ -64,6 +87,10 @@ export default {
             wx.setNavigationBarTitle({
                 title: info.title
             })
+        },
+        async getComment() {
+            const comment = await get("/weapp/commentlist", {bookid: this.bookid})
+            this.comments = comment.list
         },
         getGeo(e) {
             // DUSOroZT7MfMroZn9ZNVBgrVuiG2L4GU  latitude  longitude
@@ -119,9 +146,20 @@ export default {
             try {
                 await post("/weapp/addcomment", data)
                 this.comment = ""
+                this.getComment()
             } catch (e) {
                 showModel("失败", e.message)
             }
+        }
+    },
+    onShareAppMessage: function(res) {
+        if (res.from === "menu") {
+            // 来自页面内转发按钮
+            console.log(res)
+        }
+        return {
+            title: this.info.title,
+            path: "/pages/detail/main?id=" + this.bookid
         }
     }
 }
