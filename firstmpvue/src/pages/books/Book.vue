@@ -33,6 +33,7 @@ export default {
     },
     onPullDownRefresh() {
         this.getList(true)
+        this.getTop()
     },
     onReachBottom() {
         if (!this.more) {
